@@ -6,24 +6,28 @@ pipeline {
         timestamps()
     }
     environment {
-        registry = "<dockerhub-username>/<repo-name>"
-        registryCredential = '<dockerhub-credential-name>'
+        DOCKERHUB_CREDENTIALS = credentials('preshtego-dockerhub')
     }
     stages {
         stage('Building Image') {
             steps {
-                script {
-                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
-                }
+                sh 'docker build -t preshtego/cicd:$BUILD_NUMBER .'
             }
         }
-        stage('Deploy Image') {
+        stage('Login to Docker') {
             steps {
-                script {
-                    docker.withRegistry( '', registryCredential ) {
-                    dockerImage.push()
-                }
+                sh 'echo DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             }
+        }
+        stage('docker Push') {
+            steps {
+                sh 'docker push preshtego/cicd:$BUILD_NUMBER'
+            }
+        }
+    }
+    post {
+        always {
+            sh 'docker logout'
         }
     }
 }
