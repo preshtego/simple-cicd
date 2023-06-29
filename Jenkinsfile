@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
     options {
@@ -32,4 +31,3 @@ pipeline {
         }
     }
 }
-# java project
