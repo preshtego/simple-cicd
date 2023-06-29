@@ -1,1 +1,1 @@
-# simple-cicd of java
+# simple-cicd of java project
