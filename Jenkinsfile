@@ -20,6 +20,11 @@ pipeline {
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             }
         }
+        stage('Scan') {
+            steps {
+                sh 'trivy preshtego/cicd:$BUILD_NUMBER'
+            }
+        }
         stage('docker Push') {
             steps {
                 sh 'docker push preshtego/cicd:$BUILD_NUMBER'
