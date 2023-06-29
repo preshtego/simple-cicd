@@ -11,6 +11,7 @@ pipeline {
     stages {
         stage('Building Image') {
             steps {
+                sh 'mvn clean install'
                 sh 'docker build -t preshtego/cicd:$BUILD_NUMBER .'
             }
         }
