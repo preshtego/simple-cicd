@@ -14,7 +14,7 @@ pipeline {
                 sh 'docker build -t preshtego/cicd:$BUILD_NUMBER .'
             }
         }
-		stage('Test') {
+	stage('Test') {
             steps {
                 sh 'mvn test'
             }
