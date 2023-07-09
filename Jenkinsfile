@@ -10,8 +10,18 @@ pipeline {
     stages {
         stage('Building Image') {
             steps {
-                sh 'mvn clean install'
+                sh 'mvn -B -DskipTests clean install'
                 sh 'docker build -t preshtego/cicd:$BUILD_NUMBER .'
+            }
+        }
+		stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
             }
         }
         stage('Login to Docker') {
